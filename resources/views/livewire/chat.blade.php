@@ -6,65 +6,66 @@
     </x-slot>
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-sm sm:rounded-lg mb-15 overflow-hidden h-calc[(100vh-12rem)] scroll-smooth">
+            {{-- chat-container  --}}
+            <div id='chat-container' class="bg-white shadow-sm sm:rounded-lg mb-15 overflow-hidden h-calc[(100vh-12rem)] scroll-smooth">
                 <div class="w-full" style="padding: 2rem">
-                    <div class="grid pb-11">
-                        <div class="flex gap-2.5 mb-4">
-                            <img src="https://pagedone.io/asset/uploads/1710412177.png" alt="Shanay image"
-                                class="w-6 h-6">
-                            <div class="grid" style="padding: 0.5rem">
-                                <h5 class="text-gray-900 text-sm font-semibold leading-snug pb-1">Shanay cruz</h5>
-                                <div class="w-max grid">
-                                    <div
-                                        class="px-3.5 py-2 bg-gray-100 rounded justify-start  items-center gap-3 inline-flex">
-                                        <h5 class="text-gray-900 text-sm font-normal leading-snug">Guts, I need a review
-                                            of work. Are you ready?</h5>
-                                    </div>
-                                    <div class="justify-end items-center inline-flex mb-2.5">
-                                        <h6 class="text-gray-500 text-xs font-normal leading-4 py-1">05:14 PM</h6>
-                                    </div>
-                                </div>
-                                <div class="w-max grid">
-                                    <div
-                                        class="px-3.5 py-2 bg-gray-100 rounded justify-start items-center gap-3 inline-flex">
-                                        <h5 class="text-gray-900 text-sm font-normal leading-snug">Let me know</h5>
-                                    </div>
-                                    <div class="justify-end items-center inline-flex mb-2.5">
-                                        <h6 class="text-gray-500 text-xs font-normal leading-4 py-1">05:14 PM</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex gap-2.5 justify-end pb-40">
-                        <div class="">
-                            <div class="grid mb-2" style="padding: 0.5rem">
-                                <h5 class="text-right text-gray-900 text-sm font-semibold leading-snug pb-1">You</h5>
-                                <div class="px-3 py-2 bg-indigo-600 rounded" style="background-color: #3B82F6">
-                                    <h2 class="text-white text-sm font-normal leading-snug">Yes, let’s see, send your
-                                        work here</h2>
-                                </div>
-                                <div class="justify-start items-center inline-flex">
-                                    <h3 class="text-gray-500 text-xs font-normal leading-4 py-1">05:14 PM</h3>
-                                </div>
-                            </div>
-                            <div class="justify-center">
-                                <div class="grid w-fit ml-auto">
-                                    <div class="px-3 py-2 bg-indigo-600 rounded " style="background-color: #3B82F6">
-                                        <h2 class="text-white text-sm font-normal leading-snug">Anyone on for lunch
-                                            today</h2>
-                                    </div>
-                                    <div class="justify-start items-center inline-flex">
-                                        <h3 class="text-gray-500 text-xs font-normal leading-4 py-1">You</h3>
+                    @foreach ($messages as $message)
+                        {{-- Receiver Message Section --}}
+                        {{-- If the message sender is not the authenticated user --}}
+                        @if ($message->sender_id !== Auth::user()->id)
+                            <div class="grid pb-11">
+                                <div class="flex gap-2.5 mb-4">
+                                    <img src="https://pagedone.io/asset/uploads/1710412177.png" alt="Shanay image"
+                                        class="w-6 h-6">
+                                    <div class="grid" style="padding: 0.5rem">
+                                        <h5 class="text-gray-900 text-sm font-semibold leading-snug pb-1">
+                                            {{ $message->sender->name }}
+                                        </h5>
+                                        <div class="w-max grid">
+                                            <div
+                                                class="px-3.5 py-2 bg-gray-100 rounded justify-start  items-center gap-3 inline-flex">
+                                                <h5 class="text-gray-900 text-sm font-normal leading-snug">
+                                                    {{ $message->message }}</h5>
+                                            </div>
+                                            <div class="justify-end items-center inline-flex mb-2.5">
+                                                <h6 class="text-gray-500 text-xs font-normal leading-4 py-1">
+                                                    {{ $message->created_at->format('h:i A') }}
+                                                </h6>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <img src="https://pagedone.io/asset/uploads/1704091591.png" alt="Hailey image" class="w-6 h-6">
-                    </div>
+                        @else
+                            {{-- Sender Message Section --}}
+                            <div class="flex gap-2.5 justify-end pb-4">
+                                <div class="">
+                                    <div class="grid mb-2" style="padding: 0.5rem">
+                                        <h5
+                                            class="text-right text-gray-900 text-sm font-semibold leading-snug pb-1">
+                                            You
+                                        </h5>
+                                        <div class="px-3 py-2 bg-indigo-600 rounded"
+                                            style="background-color: #3B82F6">
+                                            <h2 class="text-white text-sm font-normal leading-snug">
+                                                {{ $message->message }}</h2>
+                                        </div>
+                                        <div class="justify-start items-center inline-flex">
+                                            <h3 class="text-gray-500 text-xs font-normal leading-4 py-1">
+                                                {{ $message->created_at->format('h:i A') }}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img src="https://pagedone.io/asset/uploads/1704091591.png" alt="Hailey image"
+                                    class="w-6 h-6">
+                            </div>
+                        @endif
+                    @endforeach
+
+                    {{-- Send Message Section --}}
                     <form wire:submit="sendMessage">
-                        <div
-                            class="w-full pl-3 pr-1 py-1 rounded-full border border-gray-200 items-center gap-2 inline-flex justify-between" style="padding: 0.5rem">
+                        <div class="w-full pl-3 pr-1 py-1 rounded-full border border-gray-200 items-center gap-2 inline-flex justify-between"
+                            style="padding: 0.5rem">
                             <div class="w-full flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
                                     viewBox="0 0 22 22" fill="none">
@@ -74,7 +75,8 @@
                                             stroke="#4F46E5" stroke-width="1.6" />
                                     </g>
                                 </svg>
-                                <input wire:model="message" class="w-full border rounded-full px-3 py-1 text-black text-xs font-medium leading-4 focus:outline-none"
+                                <input id="message-input" wire:keydown='userTyping' wire:model="message"
+                                    class="w-full border rounded-full px-3 py-1 text-black text-xs font-medium leading-4 focus:outline-none"
                                     placeholder="Type here...">
                             </div>
                             <div class="flex items-center gap-2">
@@ -118,3 +120,36 @@
     </div>
 
 </div>
+
+<script type="module">
+    let chatContainer = document.getElementById('chat-container');
+    window.Echo.private(`chat-channel.{{ $senderId }}`)
+        .listen('userTyping', (event) => {
+            console.log(event);
+            const messageInput = document.getElementById('message-input');
+
+            if(messageInput){
+                messageInput.placeholder = 'Typing...';
+            }
+
+            setTimeout(() => {
+                if(messageInput){
+                    messageInput.placeholder = 'Type here...';
+                }
+            }, 2000);       
+            
+        });
+    Livewire.on('messages-updated', () => {
+        setTimeout(() => {
+            scrollToLatestMessage();
+        }, 50);
+    });
+
+    window.onload = () => {
+        scrollToLatestMessage();
+    }
+
+    function scrollToLatestMessage() {
+        window.scrollTo(0, chatContainer.scrollHeight);
+    }
+</script>
