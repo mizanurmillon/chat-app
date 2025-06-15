@@ -9,6 +9,15 @@ class Message extends Model
 {
     protected $guarded = [];
 
+    protected $appends = ['formatted_date'];
+
+    public function getFormattedDateAttribute()
+    {
+        $data = Carbon::parse($this->created_at);
+
+       return $data->isToday() ? 'Today' : ($data->isYesterday() ? 'Yesterday' : $data->format('j F Y')); ;
+    }
+
     public function sender()
     {
         return $this->belongsTo(User::class, 'sender_id', 'id');
